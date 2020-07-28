@@ -4,21 +4,24 @@
 ** AUTOR
     Fernando Palomera
 ** FECHA ULTIMA MODIFICACION
-    24/07/2020 
+    27/07/2020 
 ** DESCRIPCION
-    Generar una vista con los datos y campos calculados más utilizados para reportes de docentes
-** NOTAS PROGRAMACION
+    Generar una vista con los campos calculados más utilizados para reportes sobre alumnos
+** DETAILS
     Incluye:
-      
+        Cantidad de Créditos aprobados, reprobados, pendientes, cursados y reconocidos
+        Promedio de notas de cátedras aprobadas y reprobadas
     Filtros:
-        
+        Ingresos desde el año 2020
+        No considerar alumnos 'introductorios' y otros casos por definir en detalle.
     Pendiente:
     - Revisar Tipo_Alumno, Cod_SitAcademica
+    - Sistema de UD para postgrado (depende de decreto)
 
 **************************/
 SELECT
     a.Cod_Alumno, LEFT(a.Sem_IngresoDecreto, 4) AS Año_Ingreso,
-    ---Unidad SISTEMA Credítos o Ud
+    ---PENDIENTE: Unidad SISTEMA: Credítos o Ud
     (CASE WHEN Cred_Aprob IS NULL THEN 0 ELSE Cred_Aprob END) AS Cred_Aprob,
     (CASE WHEN Cred_Reprob IS NULL THEN 0 ELSE Cred_Reprob END) AS Cred_Reprob,
     (CASE WHEN Cred_Pend IS NULL THEN 0 ELSE Cred_Pend END) AS Cred_Pend,
@@ -72,4 +75,5 @@ WHERE
     -- No considerar como alumnos a los 'introductorios' ni los libres
     AND a.tipo_alumno NOT IN ('INTRO', 'LIBRE', 'LIBREPOST')
     AND a.Cod_SitAcademica NOT IN ('CONVOCADO', 'NO MATRICULADO')
+    -- Ingresos desde el año 2000
     AND LEFT(Sem_IngresoDecreto, 4) >= 2000

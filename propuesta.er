@@ -14,10 +14,10 @@
 
 [Vista_Alumnos]
 *Cod_Alumno
-Año_Ingreso
 Prom_CredAprobReprob
 Cred_Aprobados
 Cred_Reprobados
+Cred_Pendientes
 Cred_Cursados
 Cred_Reconocidos
 
@@ -26,12 +26,12 @@ Cred_Reconocidos
 *Cod_Catedra
 *Cod_Seccion
 *Cod_Persona
-Año_Pregrado
+Año_Academico
 Profesor_DeptoVigente**
 Profesor_Jerarquia**
-Catedra_Escuela
-EvaDocente_p134
-EvaDocente_p1-p12
+Escuela_Catedra
+EvaDocente_p1p3p4
+EvaDocente_p1a12
 EvaDocente_Nota
 EvaDocente_Encuestados
 Carga_Academica
@@ -40,7 +40,7 @@ Carga_Academica
 *Periodo
 *Cod_Catedra
 *Cod_Seccion
-Catedra_Tipo
+Tipo_Catedra
 Curso_Alumnos
 
 [Alumnos]
@@ -64,7 +64,7 @@ Nom_Catedra
 [Docentes]
 Cod_Persona
 Horas
-Acreditacion...
+Acreditacion***
 
 Vista_Alumnos 1--1 Alumnos
 Alumnos +--1 Personas
