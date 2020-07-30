@@ -4,7 +4,7 @@
 ** AUTOR
     Fernando Palomera
 ** FECHA ULTIMA MODIFICACION
-    27/07/2020 
+    30/07/2020 
 ** DESCRIPCION
     Generar una vista con los campos calculados más utilizados para reportes sobre alumnos
 ** DETAILS
@@ -17,18 +17,24 @@
     Pendiente:
     - Revisar Tipo_Alumno, Cod_SitAcademica
     - Sistema de UD para postgrado (depende de decreto)
-
 **************************/
 SELECT
-    a.Cod_Alumno, LEFT(a.Sem_IngresoDecreto, 4) AS Año_Ingreso,
+    a.Cod_Alumno,
+    CAST(LEFT(a.Sem_IngresoDecreto, 4) AS int) AS Año_Ingreso,
+    (CASE
+        WHEN a.Tipo_Alumno IN ('IC', 'IICG', 'CA')
+            THEN 'PREGRADO'
+        WHEN a.Tipo_Alumno IN ('LIBRE', 'LIBREPOST')
+            THEN 'LIBRE'
+        ELSE 'POSTGRADO'
+        END) AS Escuela,
     ---PENDIENTE: Unidad SISTEMA: Credítos o Ud
     (CASE WHEN Cred_Aprob IS NULL THEN 0 ELSE Cred_Aprob END) AS Cred_Aprob,
     (CASE WHEN Cred_Reprob IS NULL THEN 0 ELSE Cred_Reprob END) AS Cred_Reprob,
     (CASE WHEN Cred_Pend IS NULL THEN 0 ELSE Cred_Pend END) AS Cred_Pend,
     (CASE WHEN Cred_Curs IS NULL THEN 0 ELSE Cred_Curs END) AS Cred_Curs,
     (CASE WHEN Cred_Recon IS NULL THEN 0 ELSE Cred_Recon END) AS Cred_Recon,
-    Prom_AprobReprob
-    
+    Prom_AprobReprob 
 FROM
     dbo.Alumnos AS a
     LEFT JOIN 
@@ -72,8 +78,8 @@ WHERE
     LEFT(a.Cod_Alumno, 2) != 'LD' 
     AND LEFT(a.Cod_Alumno, 1) != 'G'
     AND LEFT(a.Cod_Alumno, 5) != 'INTRO'
-    -- No considerar como alumnos a los 'introductorios' ni los libres
-    AND a.tipo_alumno NOT IN ('INTRO', 'LIBRE', 'LIBREPOST')
+    -- No considerar como alumnos a los 'introductorios'
+    AND a.tipo_alumno NOT IN ('INTRO')
     AND a.Cod_SitAcademica NOT IN ('CONVOCADO', 'NO MATRICULADO')
     -- Ingresos desde el año 2000
     AND LEFT(Sem_IngresoDecreto, 4) >= 2000
