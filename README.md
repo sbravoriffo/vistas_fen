@@ -3,13 +3,13 @@
 ## Tabla de Contenidos
 
 * [Acerca del Proyecto](#acerca-del-proyecto)
-* [Herramientas Utilizadas](#getting-started)
-* [Cómo Usar](#usage)
-* [Campos]
+* [Herramientas Utilizadas](#herramientas-utilizadas)
+* [Cómo Usar](#cómo-usar)
+* [Campos] (#campos)
 
 ## Acerca del Proyecto
 
-[![Esquema_Vistas][product-screenshot]](https://github.com/fdopalomera/vistas_fen/blob/master/esquema_vistas1.1.png?raw=true)
+![Esquema_Vistas](https://github.com/fdopalomera/vistas_fen/blob/master/esquema_vistas1.1.png?raw=true)
 
 Proyecto de Vistas de SQL (Views) para utilizarse en reportes de Power BI de la FEN.
 Son 4 entidades (Alumnos, Docentes, Cursos y Docentes_Cursos) de los cuales se han cálculado los campos calculados más utilizados, entre otros atributos, para un mayor control y consistencia de las métricas a lo largo de toda la organización.
