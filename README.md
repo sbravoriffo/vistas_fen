@@ -5,7 +5,11 @@
 * [Acerca del Proyecto](#acerca-del-proyecto)
 * [Herramientas Utilizadas](#herramientas-utilizadas)
 * [Cómo Usar](#cómo-usar)
-* [Campos] (#campos)
+* [Memoria de Cálculo](#memoria-de-cálculo)
+    * [Vista_Alumnos](#vista_alumnos)
+    * [Vista_Docentes](#vista_docentes)
+    * [Vista_Cursos](#vista_alumnos)
+    * [Vista_DocentesCursos](#vista_docentescursos)
 
 ## Acerca del Proyecto
 
@@ -19,7 +23,6 @@ Son 4 entidades (Alumnos, Docentes, Cursos y Docentes_Cursos) de los cuales se h
 * [SQL](https://code.visualstudio.com/download)
 * [ERD Preview](https://marketplace.visualstudio.com/items?itemName=kaishuu0123.vscode-erd-preview)
 
-<!-- COMO-USAR -->
 ## Cómo Usar
 Una vez inciado Power BI, puede seguir los siguientes pasos para importar estas vistas como tablas en su esquema para el reporte:
 
@@ -30,14 +33,19 @@ Una vez inciado Power BI, puede seguir los siguientes pasos para importar estas 
 5) __*Opcional*:__ Sí desea utilizar campos adicionales proveniente de otras tablas cuya relación se establece con múliples campos como llaves (Ej: Tabla _Cursos_ para relacionar con _Vista_Cursos_), cree una nueva columna  
 6) Apoyese de la 
 
-## Campos
+## Memoria de Cálculo
 
 ### Vista_Alumnos
+
+#### Filtros
+* Solo se registran alumnos ingresados desde el año 2000. 
+* Se omite en todos los cálculos las cátedras extracurriculares.
+#### Atributos
 * __Cod_Alumno__:  Código identificador del alumno.
-* __Año_Ingreso__: Año en el cual se registra el ingreso del alumno (no la persona) a la facultad, extraído a partir del periodo de `Sem_IngresoDecreto ` de la tabla _Alumnos_.
-* __Escuela__: Pregrado LIBRE o Postgrado
+* __Año_Ingreso__: Año en el cual se registra el ingreso del alumno (no la persona) a la facultad, extraído a partir del periodo de `Sem_IngresoDecreto` de la tabla _Alumnos_.
+* __Escuela__: División de la facultad a la que pertence el alumno según el programa de estudios. Cálculado a partir de `Tipo_Alumno` de la tabla _Alumnos_, pudiendo obtener los valores de PREGRADO (IC, IICG , CA) LIBRE (LIBRE, LIBREPOST) o POSTGRADO (todos los demás programas)
 * __Prom_AprobReprob__: Promedio ponderado entre las notas y los créditos obtenidos de las cátedras aprobadas y reprobadas que el alumno posee hasta el momento de la consulta, omitiendose los cursos extracurriculares.  
-* __Cred_Aprob__:  
+* __Cred_Aprob__: Suma de todos los créditos aprobados 
 * __Cred_Reprob__:  
 * __Cred_Pend__:  
 * __Cred_Curs__:  
