@@ -2,14 +2,14 @@
 
 ## Tabla de Contenidos
 
-* [Acerca del Proyecto](#about-the-project)
+* [Acerca del Proyecto](#acerca-del-proyecto)
 * [Herramientas Utilizadas](#getting-started)
-* [Cómo utilizar](#usage)
+* [Cómo Usar](#usage)
 * [Campos]
 
 ## Acerca del Proyecto
 
-[![Esquema_Vistas][product-screenshot]](https://github.com/fdopalomera/vistas_fen/blob/master/esquema_vistas1.1.png)
+[![Esquema_Vistas][product-screenshot]](https://github.com/fdopalomera/vistas_fen/blob/master/esquema_vistas1.1.png?raw=true)
 
 Proyecto de Vistas de SQL (Views) para utilizarse en reportes de Power BI de la FEN.
 Son 4 entidades (Alumnos, Docentes, Cursos y Docentes_Cursos) de los cuales se han cálculado los campos calculados más utilizados, entre otros atributos, para un mayor control y consistencia de las métricas a lo largo de toda la organización.
@@ -19,7 +19,8 @@ Son 4 entidades (Alumnos, Docentes, Cursos y Docentes_Cursos) de los cuales se h
 * [SQL](https://code.visualstudio.com/download)
 * [ERD Preview](https://marketplace.visualstudio.com/items?itemName=kaishuu0123.vscode-erd-preview)
 
-## Cómo utilizar
+<!-- COMO-USAR -->
+## Cómo Usar
 Una vez inciado Power BI, puede seguir los siguientes pasos para importar estas vistas como tablas en su esquema para el reporte:
 
 1) Seleccionar _Obtener Datos_, para luego seleccionar la opción de "Base de SQL Server", o directamente desde las opciones _SQL_Server_ o de _Origenes Recientes_, siendo recomendable esta última si anteriormente ha establecido una conexión a las bases de SAD.
@@ -29,7 +30,6 @@ Una vez inciado Power BI, puede seguir los siguientes pasos para importar estas 
 5) __*Opcional*:__ Sí desea utilizar campos adicionales proveniente de otras tablas cuya relación se establece con múliples campos como llaves (Ej: Tabla _Cursos_ para relacionar con _Vista_Cursos_), cree una nueva columna  
 6) Apoyese de la 
 
-<!-- USAGE EXAMPLES -->
 ## Campos
 
 ### Vista_Alumnos
