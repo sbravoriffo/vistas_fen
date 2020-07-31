@@ -1,7 +1,15 @@
 # Vistas de SAD para reportes en Power BI
+
+## Tabla de Contenidos
+
+* [Acerca del Proyecto](#about-the-project)
+* [Herramientas Utilizadas](#getting-started)
+* [Cómo utilizar](#usage)
+* [Campos]
+
 ## Acerca del Proyecto
 
-[![Product Name Screen Shot][product-screenshot]](https://drive.google.com/file/d/1gqjBbNZL5Xf6mnl24EhLHJXl4Wnm_43Y/view?usp=sharing)
+[![Esquema_Vistas][product-screenshot]](https://github.com/fdopalomera/vistas_fen/blob/master/esquema_vistas1.1.png)
 
 Proyecto de Vistas de SQL (Views) para utilizarse en reportes de Power BI de la FEN.
 Son 4 entidades (Alumnos, Docentes, Cursos y Docentes_Cursos) de los cuales se han cálculado los campos calculados más utilizados, entre otros atributos, para un mayor control y consistencia de las métricas a lo largo de toda la organización.
