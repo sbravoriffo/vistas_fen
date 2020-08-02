@@ -2,18 +2,28 @@
 
 ## Tabla de Contenidos
 
-* [Acerca del Proyecto](#acerca-del-proyecto)
-* [Herramientas Utilizadas](#herramientas-utilizadas)
-* [Cómo Usar](#cómo-usar)
-* [Memoria de Cálculo](#memoria-de-cálculo)
-    * [Vista_Alumnos](#vista_alumnos)
-    * [Vista_Docentes](#vista_docentes)
-    * [Vista_Cursos](#vista_alumnos)
-    * [Vista_DocentesCursos](#vista_docentescursos)
+- [Vistas de SAD para reportes en Power BI](#vistas-de-sad-para-reportes-en-power-bi)
+  - [Tabla de Contenidos](#tabla-de-contenidos)
+  - [Acerca del Proyecto](#acerca-del-proyecto)
+  - [Herramientas Utilizadas](#herramientas-utilizadas)
+  - [Cómo Usar](#cómo-usar)
+  - [Memoria de Cálculo](#memoria-de-cálculo)
+    - [Vista_Alumnos](#vista_alumnos)
+      - [Filtros](#filtros)
+      - [Atributos](#atributos)
+    - [Vista_Docentes](#vista_docentes)
+      - [Filtros](#filtros-1)
+      - [Campos](#campos)
+    - [Vista_Cursos](#vista_cursos)
+      - [Filtros](#filtros-2)
+      - [Campos](#campos-1)
+    - [Vista_DocentesCursos](#vista_docentescursos)
+      - [Filtros](#filtros-3)
+      - [Campos](#campos-2)
 
 ## Acerca del Proyecto
 
-![Esquema_Vistas](https://github.com/fdopalomera/vistas_fen/blob/master/esquema_vistas1.1.png?raw=true)
+![Esquema_Vistas](https://github.com/fdopalomera/vistas_fen/blob/master/views_schema/esquema_vistas1.1.png?raw=true)
 
 Proyecto de Vistas de SQL (Views) para utilizarse en reportes de Power BI de la FEN.
 Son 4 entidades (Alumnos, Docentes, Cursos y Docentes_Cursos) de los cuales se han cálculado los campos calculados más utilizados, entre otros atributos, para un mayor control y consistencia de las métricas a lo largo de toda la organización.
@@ -24,6 +34,7 @@ Son 4 entidades (Alumnos, Docentes, Cursos y Docentes_Cursos) de los cuales se h
 * [ERD Preview](https://marketplace.visualstudio.com/items?itemName=kaishuu0123.vscode-erd-preview)
 
 ## Cómo Usar
+
 Una vez inciado Power BI, puede seguir los siguientes pasos para importar estas vistas como tablas en su esquema para el reporte:
 
 1) Seleccionar _Obtener Datos_, para luego seleccionar la opción de "Base de SQL Server", o directamente desde las opciones _SQL_Server_ o de _Origenes Recientes_, siendo recomendable esta última si anteriormente ha establecido una conexión a las bases de SAD.
@@ -38,9 +49,12 @@ Una vez inciado Power BI, puede seguir los siguientes pasos para importar estas 
 ### Vista_Alumnos
 
 #### Filtros
+
 * Solo se registran alumnos ingresados desde el año 2000. 
 * Se omite en todos los cálculos las cátedras extracurriculares.
+* 
 #### Atributos
+
 * __Cod_Alumno__:  Código identificador único del alumno.
 * __Año_Ingreso__: Año en el cual se registra el ingreso del alumno (no la persona) a la facultad, extraído a partir del periodo de `Sem_IngresoDecreto` de la tabla _Alumnos_.
 * __Escuela__: División de la facultad a la que pertence el alumno según el programa de estudios. Cálculado a partir de `Tipo_Alumno` de la tabla _Alumnos_, pudiendo obtener los valores de PREGRADO (IC, IICG , CA) LIBRE (LIBRE, LIBREPOST) o POSTGRADO (todos los demás programas)
@@ -54,9 +68,11 @@ Una vez inciado Power BI, puede seguir los siguientes pasos para importar estas 
 ### Vista_Docentes
 
 #### Filtros
+
 * Ninguno, presenta la misma cantidad de registros que la tabla _Docentes_.
 
 #### Campos
+
 * __Cod_Persona__: Código identificador único de la persona, generalmente el RUT.
 * __Academico__: Nombre del docente, concatenando `Apellido1`, `Apellido2` y `Nombre1` de la tabla _Personas_.
 * __DeptoVigente__: Departamento al cual pertenece al momento de la consulta el docente. Se genera a partir del campo `DepartamentoVigente` de la tabla _Docentes_, transformando los valores SIN DATOS o valores nulos (NULL en SQL) en PART-TIME.
@@ -65,10 +81,12 @@ Una vez inciado Power BI, puede seguir los siguientes pasos para importar estas 
 ### Vista_Cursos
 
 #### Filtros
-* No se registran cusos eliminados de la progrmación docente. 
+
+* No se registran cursos eliminados de la progrmación docente. 
 * No se registran cursos con código de cátrdas antiguos, donde los útlimos 3 caractéres de su `Cod_Catedra` no son exclusivamente números. Ej: FAC0405
 
 #### Campos
+
 * __Periodo__: Semestre (o Bimestre en Postgrado Executive) cuando fue o es impartida la cátedra.
 * __Cod_Catedra__: Código identificador de la cátedra impartida. 
 * __Cod_Seccion__: Código identificador de la sección correspondiente al curso.
@@ -79,19 +97,24 @@ Una vez inciado Power BI, puede seguir los siguientes pasos para importar estas 
 * __Curso_Alumnos__: Total de alumnos registrados como inscritos en el curso al momento de la consulta.
 
 ### Vista_DocentesCursos
+
+#### Filtros
+
+* No se registran cursos eliminados de la progrmación docente. 
+* No se registran cursos con código de cátrdas antiguos, donde los útlimos 3 caractéres de su `Cod_Catedra` no son exclusivamente números. Ej: FAC0405
+* Docentes solo considera a el/la o los/las profesores que hayan impartido la cátedra, no incluye ni ayudantes ni coordinadores.
+
+#### Campos
+
 * __Periodo__: Semestre (o Bimestre en Postgrado Executive) cuando fue o es impartida la cátedra.
-* __Cod_Catedra__: Código identificador de la cátedra impartida. 
+* __Cod_Catedra__: Código identificador de la cátedra impartida.
 * __Cod_Seccion__: Código identificador de la sección correspondiente al curso.
-* __ID_Curso__: Llave única para c/curso creada para utilizarse en la construcción de relaciones en Power BI. Se genera a través de la concatenación de _Periodo_, _Cod_Catedra_ y _Cod_Seccion_.
-* __EvaDocente_p1p3p4__:
-* __EvaDocente_p1a12__:
-* __EvaDocente_Encuestados__:
+* __ID_Curso__: Llave única para c/curso creada para utilizarse en la construcción de relaciones en Power BI. Se genera a través de la concatenación de `Periodo`, `Cod_Catedra` y `Cod_Seccion`.
+* __EvaDocente_p1p3p4__: Nota promedio de las preguntas 1,3 y 4 de la evaluación docente final, no intermedia, que obtuvo el profesor en el curso. Se cálcula promediando la media de cada una de las 3 preguntas, en escala de 1 a 7.
+* __EvaDocente_p1a12__: Nota promedio de las preguntas 1 a la 12 de la evaluación docente final, no intermedia, que obtuvo el profesor en el curso. Se cálcula promediando la media de cada una de las 12 preguntas, en escala de 1 a 7.
+* __EvaDocente_Nota__: Nota promedio de la evaluación realizada por los estudantes en la evaluación docente final, no intermedia, que obtuvo el profesor en el curso. La escala va de 1 a 7.
+* __EvaDocente_Encuestados__: Cantidad de alumnos que respondieron la encuesta docente del curso, y cuyas evaluaciones estan registradas.
 * __Carga_Academica__:
 
 <!-- Pendientes(Test) -->
 <!-- Contribuyentes --->
-
-
-
-
-
