@@ -9,17 +9,10 @@
   - [Cómo Usar](#cómo-usar)
   - [Memoria de Cálculo](#memoria-de-cálculo)
     - [Vista_Alumnos](#vista_alumnos)
-      - [Filtros](#filtros)
-      - [Atributos](#atributos)
     - [Vista_Docentes](#vista_docentes)
-      - [Filtros](#filtros-1)
-      - [Campos](#campos)
     - [Vista_Cursos](#vista_cursos)
-      - [Filtros](#filtros-2)
-      - [Campos](#campos-1)
     - [Vista_DocentesCursos](#vista_docentescursos)
-      - [Filtros](#filtros-3)
-      - [Campos](#campos-2)
+
 
 ## Acerca del Proyecto
 
