@@ -1,0 +1,110 @@
+# Entities are declared in '[' ... ']'. All attributes after the entity header
+# up until the end of the file (or the next entity declaration) correspond
+# to this entity.
+
+# Each relationship must be between exactly two entities, which need not
+# be distinct. Each entity in the relationship has exactly one of four
+# possible cardinalities:
+#
+# Cardinality    Syntax
+# 0 or 1         0
+# exactly 1      1
+# 0 or more      *
+# 1 or more      +
+#
+# Relaciones no recomendadas (omitidas en esquema):
+# Vista_DocentesCursos +--1 Personas
+# Vista_DocentesCursos +--1 Docentes
+# Vista_DocentesCursos *--1 Cursos
+# Vista_DocentesCursos *--1 Catedras
+
+[Vista_Alumnos]
+*Cod_Alumno
+Año_Ingreso
+Escuela
+Prom_AprobReprob
+Cred_Aprob
+Cred_Reprob
+Cred_Pend
+Cred_Curs
+Cred_Recon
+
+[Vista_DocentesCursos]
+*Periodo
+*Cod_Catedra
+*Cod_Seccion
+*Cod_Persona
+ID_Curso
+EvaDocente_p1p3p4
+EvaDocente_p1a12
+EvaDocente_Nota
+EvaDocente_Encuestados
+Carga_Academica
+
+[Vista_Docentes]
+*Cod_Persona
+Academico
+DeptoVigente**
+Jerarquia**
+
+[Vista_Cursos]
+*Periodo
+*Cod_Catedra
+*Cod_Seccion
+ID_Curso
+Año_Academico
+Escuela
+Tipo_Catedra
+Curso_Alumnos
+
+[Alumnos]
+*Cod_Alumno
+*Cod_Persona
+Sem_IngresoDecreto
+Tipo_Alumno
+Cod_Mencion
+Decreto
+Tipo_Ingreso
+Cod_SitAcademica
+PSU***
+
+[Personas]
+*Cod_Persona
+Nombre1
+Nombre2
+Apellido1
+Apellido2
+Uname
+Sexo
+Colegio***
+
+[Cursos]
+*Periodo
+*Cod_Catedra
+*Cod_Seccion
+Eliminado
+Coordinacion
+
+[Catedras]
+*Cod_Catedra
+Nom_Catedra
+Area
+
+[Docentes]
+*Cod_Persona
+Categoria
+Jerarquia
+DepartamentoVigente
+Horas
+Acreditacion***
+
+Alumnos +--1 Personas
+Personas 1--1 Docentes
+Vista_Alumnos 0--1 Alumnos
+Vista_DocentesCursos +--1 Vista_Cursos
+Vista_DocentesCursos +--1 Vista_Docentes
+Vista_Docentes 1--1 Docentes
+Vista_Docentes 1--1 Personas
+Vista_Cursos *--1 Catedras
+Vista_Cursos 0--1 Cursos
+Catedras 1--+ Cursos
