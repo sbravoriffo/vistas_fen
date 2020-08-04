@@ -14,7 +14,7 @@
 
 ## Acerca del Proyecto
 
-![Esquema_Vistas](https://github.com/fdopalomera/vistas_fen/blob/master/views_schema/esquema_vistas1.1.png?raw=true)
+![Esquema_Vistas](https://github.com/fdopalomera/vistas_fen/blob/master/views_schema/esquema_vistas1.2.png?raw=true)
 
 Proyecto de Vistas de SQL (Views) para utilizarse en reportes de Power BI de la FEN.
 Son 4 entidades (Alumnos, Docentes, Cursos y Docentes_Cursos) de los cuales se han cálculado los campos calculados más utilizados, entre otros atributos, para un mayor control y consistencia de las métricas a lo largo de toda la organización.
@@ -64,13 +64,13 @@ proveniente de otras tablas de SAD cuya relación se establece con múliples cam
 
 #### Filtros
 
-* Ninguno, presenta la misma cantidad de registros que la tabla _Docentes_.
+* Solo se considera como docentes a profesores que hayan impartido al menos una cátedra en la FEN, y que esta no haya sido eliminada de la progrmación docente.
 
 #### Campos
 
 * __Cod_Persona__: Código identificador único de la persona, generalmente el RUT.
 * __Academico__: Nombre del docente, concatenando `Apellido1`, `Apellido2` y `Nombre1` de la tabla _Personas_.
-* __DeptoVigente__: Departamento al cual pertenece al momento de la consulta el docente. Se genera a partir del campo `DepartamentoVigente` de la tabla _Docentes_, transformando los valores SIN DATOS o valores nulos (NULL en SQL) en PART-TIME.
+* __Departamento__: Departamento al cual pertenece al momento de la consulta el docente. Se genera a partir del campo `DepartamentoVigente` de la tabla _Docentes_, transformando los valores SIN DATOS o valores nulos (NULL en SQL) en PART-TIME.
 * __Jerarquia__: Rango y categoría del docente de acuerdo a la carrera académica de la Universidad de Chile. Proveninete del campo con el mismo nombre de la tabla _Docentes_, cambiando solamente los títulos femeninos a masculinos, para no crear categorías dobles en los reportes. Ej: Instructora Adjunta -> Instructor Adjunto
 
 ### Vista_Cursos

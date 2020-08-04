@@ -44,7 +44,7 @@ Carga_Academica
 [Vista_Docentes]
 *Cod_Persona
 Academico
-DeptoVigente**
+Departamento**
 Jerarquia**
 
 [Vista_Cursos]
@@ -99,12 +99,12 @@ Horas
 Acreditacion***
 
 Alumnos +--1 Personas
-Personas 1--1 Docentes
-Vista_Alumnos 0--1 Alumnos
+Personas 0--1 Docentes
+Vista_Alumnos 1--0 Alumnos
 Vista_DocentesCursos +--1 Vista_Cursos
 Vista_DocentesCursos +--1 Vista_Docentes
-Vista_Docentes 1--1 Docentes
-Vista_Docentes 1--1 Personas
+Vista_Docentes 0--1 Docentes
+Vista_Docentes 1--0 Personas
 Vista_Cursos *--1 Catedras
-Vista_Cursos 0--1 Cursos
+Vista_Cursos 1--0 Cursos
 Catedras 1--+ Cursos
