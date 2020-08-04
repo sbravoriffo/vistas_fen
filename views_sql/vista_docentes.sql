@@ -11,17 +11,17 @@ SELECT
         END) AS DeptoVigente,
     -- Jerarquía con homogeneización de género
     (CASE
-        WHEN LEFT(d.Jerarquia, 9) = 'PROFESORA ASOCIADA' 
+        WHEN LEFT(d.Jerarquia, 18) = 'PROFESORA ASOCIADA' 
             THEN REPLACE(d.Jerarquia, 'PROFESORA ASOCIADA', 'PROFESOR ASOCIADO')
-        WHEN LEFT(d.Jerarquia, 9) = 'PROFESORA ADJUNTA' 
+        WHEN LEFT(d.Jerarquia, 17) = 'PROFESORA ADJUNTA' 
             THEN REPLACE(d.Jerarquia, 'PROFESORA ADJUNTA', 'PROFESOR ADJUNTO')
         WHEN LEFT(d.Jerarquia, 9) = 'PROFESORA' 
             THEN REPLACE(d.Jerarquia, 'PROFESORA', 'PROFESOR')
-        WHEN LEFT(d.Jerarquia, 9) = 'INSTRUCTORA ASOCIADA' 
+        WHEN LEFT(d.Jerarquia, 20) = 'INSTRUCTORA ASOCIADA' 
             THEN REPLACE(d.Jerarquia, 'INSTRUCTORA ASOCIADA', 'INSTRUCTOR ASOCIADO')
-        WHEN LEFT(d.Jerarquia, 9) = 'INSTRUCTORA ADJUNTA' 
-            THEN REPLACE(d.Jerarquia, 'INSTRUCTORA ADJUNTA', 'ISNTRUCTOR AJUNTO')
-        WHEN LEFT(d.Jerarquia, 9) = 'INSTRUCTORA' 
+        WHEN LEFT(d.Jerarquia, 19) = 'INSTRUCTORA ADJUNTA' 
+            THEN REPLACE(d.Jerarquia, 'INSTRUCTORA ADJUNTA', 'INSTRUCTOR ADJUNTO')
+        WHEN LEFT(d.Jerarquia, 11) = 'INSTRUCTORA' 
             THEN REPLACE(d.Jerarquia, 'INSTRUCTORA', 'INSTRUCTOR')
         ELSE d.Jerarquia
         END) AS Jerarquia

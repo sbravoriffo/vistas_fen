@@ -4,7 +4,7 @@
 ** AUTOR
     Fernando Palomera
 ** FECHA ULTIMA MODIFICACION
-    30/07/2020 
+    04/08/2020 
 ** DESCRIPCION
     Generar una vista con los campos calculados más utilizados para reportes sobre cursos
 ** DETALLES:
@@ -13,8 +13,6 @@
         - Tipo de cátedra del curso: Core, No Core y Tésis
     Filtros:
         - Cursos eliminados de la programación docente
-    Pendiente:
-    - Curso_Alumnos nulo: cambiar a 0?
 **************************/
 SELECT
     CONCAT(u.Periodo, u.Cod_Catedra, u.Cod_Seccion) AS ID_Curso,
@@ -42,16 +40,22 @@ SELECT
             'ENMAN851', 'ENFIN851', 'ENFIN850', 'ENECO852', 'ENECO850', 'ENCGE851', 
             'ENCGE850', 'ENMAN850', 'ENNEG550', 'ENECO550') 
             THEN 'TESIS'
+        WHEN 
+            -- Prácticas, Seminarios Postgrado Executive
+            (LEFT(u.Cod_Catedra, 5) IN ('ENPRA', 'ENPRC', 'ENSEM', 'ENELC'))
+            -- Tutorías
+            OR (RIGHT(u.Cod_Catedra, 3) < 100)
+            THEN 'OTROS'
         WHEN SUBSTRING(u.Cod_Catedra, 3, 3) IN (
-            'AUD', 'CGE', 'COM', 'CON', 'ECO', 'FIN', 'GEP', 'GIN', 'HEC', 'IMP', 'MAC', 
-            'MAN', 'MEC', 'MES', 'MIC', 'MKT', 'NEG', 'OPE', 'SIA', 'TAL', 'TAX', 'STA', 
+            'AUD', 'CGE', 'CON', 'ECO', 'FIN', 'GEP', 'GIN', 'HEC', 'IMP', 'MAC', 
+            'MAN', 'MEC', 'MES', 'MIC', 'MKT', 'NEG', 'OPE', 'SIA', 'TAX', 'STA', 
             'POL', 'GES')
             THEN 'CORE'
         WHEN SUBSTRING(u.Cod_Catedra, 3, 3) IN (
-            'APP', 'AUS', 'CFG', 'CSH', 'ELE', 'DEP', 'ESO', 'FEN', 'FGF', 'FOI', 'IDI', 
-            'LEG', 'MEM', 'SEL', 'FGU', 'HAB', 'DER', 'MAT', 'LIB', 'ING', 'ESP')
+            'APP', 'AUS', 'CFG', 'CSH', 'COM', 'ELE', 'DEP', 'ESO', 'FEN', 'FGF', 'FOI', 'IDI', 
+            'LEG', 'MEM', 'SEL', 'FGU', 'HAB', 'DER', 'MAT', 'LIB', 'ING', 'ESP', 'TAL')
             THEN 'NO CORE'
-        ELSE NULL
+        ELSE 'OTROS'
         END) AS Tipo_Catedra,
     n.Curso_Alumnos
 FROM

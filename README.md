@@ -2,16 +2,14 @@
 
 ## Tabla de Contenidos
 
-- [Vistas de SAD para reportes en Power BI](#vistas-de-sad-para-reportes-en-power-bi)
-  - [Tabla de Contenidos](#tabla-de-contenidos)
-  - [Acerca del Proyecto](#acerca-del-proyecto)
-  - [Herramientas Utilizadas](#herramientas-utilizadas)
-  - [Cómo Usar](#cómo-usar)
-  - [Memoria de Cálculo](#memoria-de-cálculo)
-    - [Vista_Alumnos](#vista_alumnos)
-    - [Vista_Docentes](#vista_docentes)
-    - [Vista_Cursos](#vista_cursos)
-    - [Vista_DocentesCursos](#vista_docentescursos)
+- [Acerca del Proyecto](#acerca-del-proyecto)
+- [Herramientas Utilizadas](#herramientas-utilizadas)
+- [Cómo Usar](#cómo-usar)
+- [Memoria de Cálculo](#memoria-de-cálculo)
+  - [Vista_Alumnos](#vista_alumnos)
+  - [Vista_Docentes](#vista_docentes)
+  - [Vista_Cursos](#vista_cursos)
+  - [Vista_DocentesCursos](#vista_docentescursos)
 
 
 ## Acerca del Proyecto
@@ -31,11 +29,14 @@ Son 4 entidades (Alumnos, Docentes, Cursos y Docentes_Cursos) de los cuales se h
 Una vez inciado Power BI, puede seguir los siguientes pasos para importar estas vistas como tablas en su esquema para el reporte:
 
 1) Seleccionar _Obtener Datos_, para luego seleccionar la opción de "Base de SQL Server", o directamente desde las opciones _SQL_Server_ o de _Origenes Recientes_, siendo recomendable esta última si anteriormente ha establecido una conexión a las bases de SAD.
-2) Sí se solicita, ingresar 
-3) En el buscador
-4) En la Pestaña, . Para el caso de _Vista_Cursos_ y _Vista_DocentesCursos_
-5) __*Opcional*:__ Sí desea utilizar campos adicionales proveniente de otras tablas cuya relación se establece con múliples campos como llaves (Ej: Tabla _Cursos_ para relacionar con _Vista_Cursos_), cree una nueva columna  
-6) Apoyese de la 
+2) Si se solicita, completar los cuadros con los datos necesarios para establecer la conexión a la base de datos con los permisos necesarios.
+3) En el buscador, busque las tablas que empiecen con "BI" para seleccionar las tablas con las vistas, para luego buscar e  importar todas las tablas de SAD que posean los campos que necesite para realizar el reporte.
+4) En la pestaña de "Modelo", relacione las tablas según lo indicado en el [esquema de las vistas](#acerca-del-proyecto), arrastrando la _llave_ de una tabla a la _llave_ correspondiente de la tabla a unir. Por ejemplo: desde _Vista_Alumnos_ arrastre `Cod_Persona` hacia el campo `Cod_Persona` de la tabla _Alumnos_.
+Para el caso de _Vista_Cursos_ y _Vista_DocentesCursos_.
+5) Automaticamente aparecerá un cuadro que indicará el tipo de Cardinalidad que se genera. En practicamente todos los casos, la relación será 1:1 o 1:varios, debiendo no aparecer varios a varios. Presionando en "Aceptar" se crea la relación entre las tablas. 
+
+6) __*Opcional*:__ Sí desea utilizar campos adicionales 
+proveniente de otras tablas de SAD cuya relación se establece con múliples campos como llave (Ej: Tabla _Cursos_ para relacionar con _Vista_Cursos_), cree una nueva columna en la tabla de SAD que sea homologa a `ID_Curso` de _Vista_Cursos_.
 
 ## Memoria de Cálculo
 
@@ -45,7 +46,8 @@ Una vez inciado Power BI, puede seguir los siguientes pasos para importar estas 
 
 * Solo se registran alumnos ingresados desde el año 2000. 
 * Se omite en todos los cálculos las cátedras extracurriculares.
-* 
+* No se consideran como alumnos estudiantes de cursos introductorios, o convocados pero no matriculados en la factultad, ni tampoco estudiantes cuyo `Cod_Alumno` empiecen con 'LD' o 'G'.
+
 #### Atributos
 
 * __Cod_Alumno__:  Código identificador único del alumno.
@@ -86,7 +88,7 @@ Una vez inciado Power BI, puede seguir los siguientes pasos para importar estas 
 * __ID_Curso__: Llave única para c/curso creada para utilizarse en la construcción de relaciones en Power BI. Se genera a través de la concatenación de `Periodo`, `Cod_Catedra` y `Cod_Seccion`.
 * __Año_Academico__: Año en el cual el curso es impartido. Se considera a los semestres de verano en Pregrado y Postgrado Executive, y el primer bimestre de Postgrado Executive (valores de `Periodo` terminados en '0' y 'A', respectivamente)  
 * __Escuela__: Escuela de la facultad encargada de impartir el curso. Para el caso de que la cátedra es impartida en un semestre (valores de `Periodo` terminados en '0', '1', '2'), si el valor de `Cod_Catedra` es menor a 600, se considera de PREGRADO; e igual o superior a 600 se considera como POSTGRADO FULL-TIME. En cambio todas las cátedras impartidas en bimestres (valor de `Periodo` terminadas en letras de la 'A' a la 'F') se considera pertenecientes a POSTGRADO EXECUTIVE.
-* __Tipo_Catedra__: Categoría en la cual se clasifica la cátedra, pudiendo ser CORE, NO CORE o TESIS. Se clasifica como TESIS si en el campo `Cod_Catedra` la cátedra tiene como valor: 'ENPOL850', 'ENECO853', 'ENECO851', 'ENPOL850', 'ENMKT852', 'ENMKT850', 'ENMAN851', 'ENFIN851', 'ENFIN850', 'ENECO852', 'ENECO850', 'ENCGE851', 'ENCGE850', 'ENMAN850', 'ENNEG550' o 'ENECO550'. En cambio se clasifica como CORE si el área de la cátedra se encunetra en la siguiente lista: 'AUD', 'CGE', 'COM', 'CON', 'ECO', 'FIN', 'GEP', 'GIN', 'HEC', 'IMP', 'MAC', 'MAN', 'MEC', 'MES', 'MIC', 'MKT', 'NEG', 'OPE', 'SIA', 'TAL', 'TAX', 'STA', 'POL', 'GES'. Y como NO CORE a los cursos cuya área sean: 'APP', 'AUS', 'CFG', 'CSH', 'ELE', 'DEP', 'ESO', 'FEN', 'FGF', 'FOI', 'IDI', 'LEG', 'MEM', 'SEL', 'FGU', 'HAB', 'DER', 'MAT', 'LIB', 'ING', 'ESP'.
+* __Tipo_Catedra__: Categoría en la cual se clasifica la cátedra, pudiendo ser CORE, NO CORE o TESIS. Se clasifica como TESIS si en el campo `Cod_Catedra` la cátedra tiene como valor: 'ENPOL850', 'ENECO853', 'ENECO851', 'ENPOL850', 'ENMKT852', 'ENMKT850', 'ENMAN851', 'ENFIN851', 'ENFIN850', 'ENECO852', 'ENECO850', 'ENCGE851', 'ENCGE850', 'ENMAN850', 'ENNEG550' o 'ENECO550'. En cambio se clasifica como CORE si el área de la cátedra se encunetra en la siguiente lista: 'AUD', 'CGE', 'CON', 'ECO', 'FIN', 'GEP', 'GIN', 'HEC', 'IMP', 'MAC', 'MAN', 'MEC', 'MES', 'MIC', 'MKT', 'NEG', 'OPE', 'SIA', 'TAX', 'STA', 'POL', 'GES'. Y como NO CORE a los cursos cuya área sean: 'APP', 'AUS', 'CFG', 'COM', 'CSH', 'ELE', 'DEP', 'ESO', 'FEN', 'FGF', 'FOI', 'IDI', 'LEG', 'MEM', 'SEL', 'FGU', 'HAB', 'DER', 'MAT', 'LIB', 'ING', 'ESP', 'TAL'.
 * __Curso_Alumnos__: Total de alumnos registrados como inscritos en el curso al momento de la consulta.
 
 ### Vista_DocentesCursos
@@ -107,7 +109,15 @@ Una vez inciado Power BI, puede seguir los siguientes pasos para importar estas 
 * __EvaDocente_p1a12__: Nota promedio de las preguntas 1 a la 12 de la evaluación docente final, no intermedia, que obtuvo el profesor en el curso. Se cálcula promediando la media de cada una de las 12 preguntas, en escala de 1 a 7.
 * __EvaDocente_Nota__: Nota promedio de la evaluación realizada por los estudantes en la evaluación docente final, no intermedia, que obtuvo el profesor en el curso. La escala va de 1 a 7.
 * __EvaDocente_Encuestados__: Cantidad de alumnos que respondieron la encuesta docente del curso, y cuyas evaluaciones estan registradas.
-* __Carga_Academica__:
+* __Carga_Academica__: Medida de carga de trabajo de un profesor en un curso específico. Generalmente, este valor es igual $1/n$, siendo $n$ el número de profesores que imparten conjuntantmente el curso analizado. 
 
+Casos Especiales: 
+'ENTAL305', 'ENTAL355', 'ENTAL405', 'ENTAL500', 'ENTAL510',
+            -- Tesis
+            'ENPOL850', 'ENECO853', 'ENECO851', 'ENPOL850', 'ENMKT852', 'ENMKT850', 'ENMAN851', 
+            'ENFIN851', 'ENFIN850', 'ENECO852', 'ENECO850', 'ENCGE851', 'ENCGE850', 'ENMAN850', 
+            'ENNEG550', 'ENECO550') 
 <!-- Pendientes(Test) -->
-<!-- Contribuyentes --->
+## Contribuyentes
+
+* Fernando Palomera  - [@fdopalomera](github.com/fdopalomera)

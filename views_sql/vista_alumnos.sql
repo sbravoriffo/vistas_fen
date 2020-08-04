@@ -79,7 +79,7 @@ WHERE
     AND LEFT(a.Cod_Alumno, 1) != 'G'
     AND LEFT(a.Cod_Alumno, 5) != 'INTRO'
     -- No considerar como alumnos a los 'introductorios'
-    AND a.tipo_alumno NOT IN ('INTRO')
+    AND a.Tipo_Alumno NOT IN ('INTRO')
     AND a.Cod_SitAcademica NOT IN ('CONVOCADO', 'NO MATRICULADO')
     -- Ingresos desde el año 2000
     AND LEFT(Sem_IngresoDecreto, 4) >= 2000
