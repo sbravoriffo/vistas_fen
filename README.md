@@ -70,7 +70,7 @@ proveniente de otras tablas de SAD cuya relación se establece con múliples cam
 
 * __Cod_Persona__: Código identificador único de la persona, generalmente el RUT.
 * __Academico__: Nombre del docente, concatenando `Apellido1`, `Apellido2` y `Nombre1` de la tabla _Personas_.
-* __Departamento__: Departamento al cual pertenece al momento de la consulta el docente. Se genera a partir del campo `DepartamentoVigente` de la tabla _Docentes_, transformando los valores SIN DATOS o valores nulos (NULL en SQL) en PART-TIME.
+* __Departamento__: Departamento al cual pertenece al momento de la consulta el docente. Se genera a partir del campo `DepartamentoVigente` de la tabla _Docentes_, transformando los valores SIN DATOS o valores nulos (NULL en SQL) en PART-TIME, además de incluir en el valor "ESCUELAS" los profesores pertenecientes tanto a las escuelas de pregrado como postgrado.
 * __Jerarquia__: Rango y categoría del docente de acuerdo a la carrera académica de la Universidad de Chile. Proveninete del campo con el mismo nombre de la tabla _Docentes_, cambiando solamente los títulos femeninos a masculinos, para no crear categorías dobles en los reportes. Ej: Instructora Adjunta -> Instructor Adjunto
 
 ### Vista_Cursos
@@ -109,15 +109,8 @@ proveniente de otras tablas de SAD cuya relación se establece con múliples cam
 * __EvaDocente_p1a12__: Nota promedio de las preguntas 1 a la 12 de la evaluación docente final, no intermedia, que obtuvo el profesor en el curso. Se cálcula promediando la media de cada una de las 12 preguntas, en escala de 1 a 7.
 * __EvaDocente_Nota__: Nota promedio de la evaluación realizada por los estudantes en la evaluación docente final, no intermedia, que obtuvo el profesor en el curso. La escala va de 1 a 7.
 * __EvaDocente_Encuestados__: Cantidad de alumnos que respondieron la encuesta docente del curso, y cuyas evaluaciones estan registradas.
-* __Carga_Academica__: Medida de carga de trabajo de un profesor en un curso específico. Generalmente, este valor es igual $1/n$, siendo $n$ el número de profesores que imparten conjuntantmente el curso analizado. 
-
-Casos Especiales: 
-'ENTAL305', 'ENTAL355', 'ENTAL405', 'ENTAL500', 'ENTAL510',
-            -- Tesis
-            'ENPOL850', 'ENECO853', 'ENECO851', 'ENPOL850', 'ENMKT852', 'ENMKT850', 'ENMAN851', 
-            'ENFIN851', 'ENFIN850', 'ENECO852', 'ENECO850', 'ENCGE851', 'ENCGE850', 'ENMAN850', 
-            'ENNEG550', 'ENECO550') 
+* __Carga_Academica__: Medida de carga de trabajo de un profesor en un curso específico. Generalmente, este valor a través de la operación "1/n", siendo "n" el número de profesores que imparten conjuntantmente el curso analizado. Pero, existen casos especiales como lo son con las prácticas ('ENTAL305', 'ENTAL355', 'ENTAL405', 'ENTAL500', 'ENTAL510') y Tesis, ('ENPOL850', 'ENECO853', 'ENECO851', 'ENPOL850', 'ENMKT852', 'ENMKT850', 'ENMAN851', 'ENFIN851', 'ENFIN850', 'ENECO852', 'ENECO850', 'ENCGE851', 'ENCGE850', 'ENMAN850', 'ENNEG550', 'ENECO550') cuya carga académica es asignada como igual a 0. Por otro lado, ciertos talleres ('ENTAL265', 'ENTAL260') se les asigna la mitad de carga que una cátedra normal.
 <!-- Pendientes(Test) -->
 ## Contribuyentes
 
-* Fernando Palomera  - [@fdopalomera](github.com/fdopalomera)
+* Fernando Palomera  - [https://github.com/fdopalomera](https://github.com/fdopalomera)

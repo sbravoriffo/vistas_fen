@@ -38,6 +38,8 @@ FROM
             (CASE 
                 WHEN (d.DepartamentoVigente IS NULL) OR (d.DepartamentoVigente = 'SIN DATOS')
                     THEN 'PART-TIME'
+                WHEN d.DepartamentoVigente IN ('ESCUELAS DE PREGRADO', 'ESCUELA DE POSTGRADO')
+                    THEN 'ESCUELAS'
                 ELSE d.DepartamentoVigente
                 END) AS DeptoVigente,
             -- Jerarquía con homogeneización de género
