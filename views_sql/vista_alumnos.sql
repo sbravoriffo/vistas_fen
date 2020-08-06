@@ -4,7 +4,7 @@
 ** AUTOR
     Fernando Palomera
 ** FECHA ULTIMA MODIFICACION
-    30/07/2020 
+    06/08/2020 
 ** DESCRIPCION
     Generar una vista con los campos calculados más utilizados para reportes sobre alumnos
 ** DETAILS
@@ -12,7 +12,6 @@
         Cantidad de Créditos aprobados, reprobados, pendientes, cursados y reconocidos
         Promedio de notas de cátedras aprobadas y reprobadas
     Filtros:
-        Ingresos desde el año 2020
         No considerar alumnos 'introductorios' y otros casos por definir en detalle.
     Pendiente:
     - Revisar Tipo_Alumno, Cod_SitAcademica
@@ -81,5 +80,3 @@ WHERE
     -- No considerar como alumnos a los 'introductorios'
     AND a.Tipo_Alumno NOT IN ('INTRO')
     AND a.Cod_SitAcademica NOT IN ('CONVOCADO', 'NO MATRICULADO')
-    -- Ingresos desde el año 2000
-    AND LEFT(Sem_IngresoDecreto, 4) >= 2000

@@ -42,7 +42,7 @@ SELECT
             THEN 'TESIS'
         WHEN 
             -- Prácticas, Seminarios Postgrado Executive
-            (LEFT(u.Cod_Catedra, 5) IN ('ENPRA', 'ENPRC', 'ENSEM', 'ENELC'))
+            (SUBSTRING(u.Cod_Catedra, 3, 3) IN ('PRA', 'PRC', 'SEM', 'ELC', 'SEL'))
             -- Tutorías
             OR (RIGHT(u.Cod_Catedra, 3) < 100)
             THEN 'OTROS'
@@ -53,7 +53,7 @@ SELECT
             THEN 'CORE'
         WHEN SUBSTRING(u.Cod_Catedra, 3, 3) IN (
             'APP', 'AUS', 'CFG', 'CSH', 'COM', 'ELE', 'DEP', 'ESO', 'FEN', 'FGF', 'FOI', 'IDI', 
-            'LEG', 'MEM', 'SEL', 'FGU', 'HAB', 'DER', 'MAT', 'LIB', 'ING', 'ESP', 'TAL')
+            'LEG', 'MEM', 'FGU', 'HAB', 'DER', 'MAT', 'LIB', 'ING', 'ESP', 'TAL')
             THEN 'NO CORE'
         ELSE 'OTROS'
         END) AS Tipo_Catedra,

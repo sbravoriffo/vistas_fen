@@ -43,8 +43,7 @@ proveniente de otras tablas de SAD cuya relación se establece con múliples cam
 ### Vista_Alumnos
 
 #### Filtros
-
-* Solo se registran alumnos ingresados desde el año 2000. 
+ 
 * Se omite en todos los cálculos las cátedras extracurriculares.
 * No se consideran como alumnos estudiantes de cursos introductorios, o convocados pero no matriculados en la factultad, ni tampoco estudiantes cuyo `Cod_Alumno` empiecen con 'LD' o 'G'.
 
@@ -88,7 +87,7 @@ proveniente de otras tablas de SAD cuya relación se establece con múliples cam
 * __ID_Curso__: Llave única para c/curso creada para utilizarse en la construcción de relaciones en Power BI. Se genera a través de la concatenación de `Periodo`, `Cod_Catedra` y `Cod_Seccion`.
 * __Año_Academico__: Año en el cual el curso es impartido. Se considera a los semestres de verano en Pregrado y Postgrado Executive, y el primer bimestre de Postgrado Executive (valores de `Periodo` terminados en '0' y 'A', respectivamente)  
 * __Escuela__: Escuela de la facultad encargada de impartir el curso. Para el caso de que la cátedra es impartida en un semestre (valores de `Periodo` terminados en '0', '1', '2'), si el valor de `Cod_Catedra` es menor a 600, se considera de PREGRADO; e igual o superior a 600 se considera como POSTGRADO FULL-TIME. En cambio todas las cátedras impartidas en bimestres (valor de `Periodo` terminadas en letras de la 'A' a la 'F') se considera pertenecientes a POSTGRADO EXECUTIVE.
-* __Tipo_Catedra__: Categoría en la cual se clasifica la cátedra, pudiendo ser CORE, NO CORE o TESIS. Se clasifica como TESIS si en el campo `Cod_Catedra` la cátedra tiene como valor: 'ENPOL850', 'ENECO853', 'ENECO851', 'ENPOL850', 'ENMKT852', 'ENMKT850', 'ENMAN851', 'ENFIN851', 'ENFIN850', 'ENECO852', 'ENECO850', 'ENCGE851', 'ENCGE850', 'ENMAN850', 'ENNEG550' o 'ENECO550'. En cambio se clasifica como CORE si el área de la cátedra se encunetra en la siguiente lista: 'AUD', 'CGE', 'CON', 'ECO', 'FIN', 'GEP', 'GIN', 'HEC', 'IMP', 'MAC', 'MAN', 'MEC', 'MES', 'MIC', 'MKT', 'NEG', 'OPE', 'SIA', 'TAX', 'STA', 'POL', 'GES'. Y como NO CORE a los cursos cuya área sean: 'APP', 'AUS', 'CFG', 'COM', 'CSH', 'ELE', 'DEP', 'ESO', 'FEN', 'FGF', 'FOI', 'IDI', 'LEG', 'MEM', 'SEL', 'FGU', 'HAB', 'DER', 'MAT', 'LIB', 'ING', 'ESP', 'TAL'.
+* __Tipo_Catedra__: Categoría en la cual se clasifica la cátedra, pudiendo ser CORE, NO CORE o TESIS. Se clasifica como TESIS si en el campo `Cod_Catedra` la cátedra tiene como valor: 'ENPOL850', 'ENECO853', 'ENECO851', 'ENPOL850', 'ENMKT852', 'ENMKT850', 'ENMAN851', 'ENFIN851', 'ENFIN850', 'ENECO852', 'ENECO850', 'ENCGE851', 'ENCGE850', 'ENMAN850', 'ENNEG550' o 'ENECO550'. En cambio se clasifica como CORE si el área de la cátedra se encunetra en la siguiente lista: 'AUD', 'CGE', 'CON', 'ECO', 'FIN', 'GEP', 'GIN', 'HEC', 'IMP', 'MAC', 'MAN', 'MEC', 'MES', 'MIC', 'MKT', 'NEG', 'OPE', 'SIA', 'TAX', 'STA', 'POL', 'GES'. Y como NO CORE a los cursos cuya área sean: 'APP', 'AUS', 'CFG', 'COM', 'CSH', 'ELE', 'DEP', 'ESO', 'FEN', 'FGF', 'FOI', 'IDI', 'LEG', 'MEM', 'FGU', 'HAB', 'DER', 'MAT', 'LIB', 'ING', 'ESP', 'TAL'. Por otro lado se clasifican en OTROS las prácticas, seminarios de postgrado executive y otros ('PRA', 'PRC', 'SEM', 'ELC', 'SEL') en conjunto con las tutorías (valor de `Cod_Catedra` menores a 100). 
 * __Curso_Alumnos__: Total de alumnos registrados como inscritos en el curso al momento de la consulta.
 
 ### Vista_DocentesCursos
@@ -112,5 +111,5 @@ proveniente de otras tablas de SAD cuya relación se establece con múliples cam
 * __Carga_Academica__: Medida de carga de trabajo de un profesor en un curso específico. Generalmente, este valor a través de la operación "1/n", siendo "n" el número de profesores que imparten conjuntantmente el curso analizado. Pero, existen casos especiales como lo son con las prácticas ('ENTAL305', 'ENTAL355', 'ENTAL405', 'ENTAL500', 'ENTAL510') y Tesis, ('ENPOL850', 'ENECO853', 'ENECO851', 'ENPOL850', 'ENMKT852', 'ENMKT850', 'ENMAN851', 'ENFIN851', 'ENFIN850', 'ENECO852', 'ENECO850', 'ENCGE851', 'ENCGE850', 'ENMAN850', 'ENNEG550', 'ENECO550') cuya carga académica es asignada como igual a 0. Por otro lado, ciertos talleres ('ENTAL265', 'ENTAL260') se les asigna la mitad de carga que una cátedra normal.
 <!-- Pendientes(Test) -->
 ## Contribuyentes
-
+<!-- Espero que sean muchos más -->
 * Fernando Palomera  - [https://github.com/fdopalomera](https://github.com/fdopalomera)
