@@ -4,7 +4,7 @@
 ** AUTOR
     Fernando Palomera
 ** FECHA ULTIMA MODIFICACION
-    06/08/2020 
+    30/12/2020 
 ** DESCRIPCION
     Generar una vista con los campos calculados más utilizados para reportes sobre alumnos
 ** DETAILS
@@ -28,48 +28,81 @@ SELECT
         ELSE 'POSTGRADO'
         END) AS Escuela,
     ---PENDIENTE: Unidad SISTEMA: Credítos o Ud
-    (CASE WHEN Cred_Aprob IS NULL THEN 0 ELSE Cred_Aprob END) AS Cred_Aprob,
-    (CASE WHEN Cred_Reprob IS NULL THEN 0 ELSE Cred_Reprob END) AS Cred_Reprob,
-    (CASE WHEN Cred_Pend IS NULL THEN 0 ELSE Cred_Pend END) AS Cred_Pend,
-    (CASE WHEN Cred_Curs IS NULL THEN 0 ELSE Cred_Curs END) AS Cred_Curs,
-    (CASE WHEN Cred_Recon IS NULL THEN 0 ELSE Cred_Recon END) AS Cred_Recon,
-    Prom_AprobReprob 
+    (CASE WHEN c.Creditos_Aprobados_Cursados IS NULL THEN 0 ELSE c.Creditos_Aprobados_Cursados END) AS Cred_Aprob_Curs,
+    (CASE WHEN c.Asignaturas_Aprobadas_Cursadas IS NULL THEN 0 ELSE C.Asignaturas_Aprobadas_Cursadas END) AS Asign_Aprob_Curs,
+    c.Promedio_Aprobadas_Cursadas AS Prom_Aprob_Curs,
+    (CASE WHEN c.Creditos_Aprobados_Cursados_Reconocidos IS NULL THEN 0 ELSE c.Creditos_Aprobados_Cursados_Reconocidos END) AS Cred_Aprob_Curs_Recon,
+    (CASE WHEN c.Asignaturas_Aprobadas_Cursadas_Reconocidas IS NULL THEN 0 ELSE c.Asignaturas_Aprobadas_Cursadas_Reconocidas END) AS Asign_Aprob_Curs_Recon,
+    c.Promedio_Aprobadas_Cursadas_Reconocidas AS Prom_Aprob_Curs_Recon,
+    (CASE WHEN c.Creditos_Aprobados_Reprobados_Cursados IS NULL THEN 0 ELSE c.Creditos_Aprobados_Reprobados_Cursados END) AS Cred_Aprob_Reprob_Curs,
+    (CASE WHEN c.Asignaturas_Aprobadas_Reprobadas_Cursadas IS NULL THEN 0 ELSE c.Asignaturas_Aprobadas_Reprobadas_Cursadas END) AS Asign_Aprob_Reprob_Curs,
+    c.Promedio_Aprobadas_Reprobadas_Cursadas AS Prom_Aprob_Reprob_Curs,
+    c.Promedio_Aprobadas_Reprobadas_Cursadas_Reconocidas AS Prom_Aprob_Reprob_Curs_Recon
+   
 FROM
     dbo.Alumnos AS a
     LEFT JOIN 
         (
-        SELECT
-            Cod_Alumno, 
-            -- Créditos Aprobados Totales
-            SUM((CASE WHEN Sit_Catedra = 'APROBADA' THEN Ud END)) AS Cred_Aprob,
-            -- Créditos Reprobados Totales
-            SUM((CASE WHEN Sit_Catedra = 'REPROBADA' THEN Ud END)) AS Cred_Reprob,
-            -- Créditos Pendiente Totales
-            SUM((CASE WHEN Sit_Catedra = 'PENDIENTE' THEN Ud END)) AS Cred_Pend,
-            -- Créditos Cursados Totales
-            SUM((CASE WHEN Categoria = 'CURSADA' THEN Ud END)) AS Cred_Curs,
-            -- Créditos Reconocidos Totales
-            SUM((CASE WHEN Categoria = 'RECONOCIDA' THEN Ud END)) AS Cred_Recon,
-            -- Promedio de Notas Aprobadas y Reprobadas
-            (CASE
-                WHEN SUM(Ud) > 0 AND SUM(Nota*Ud) > 0 THEN
-            (ROUND(CAST(SUM(
-                        CASE 
-                            WHEN Nota IS NOT NULL
-                            THEN Nota*Ud END) AS float)
-                    / (CAST(SUM(
-                        CASE 
-                            WHEN Nota IS NOT NULL
-                            THEN Ud END) AS float)),3))
-                END) AS Prom_AprobReprob
-        FROM
-            Alumnos_Catedras
-        WHERE
-            Categoria IN ('CURSADA', 'RECONOCIDA')
-            -- Sin contar extracurriculares
-            AND EstadoCatedra IS NULL
-        GROUP BY
-            Cod_Alumno
+        SELECT DISTINCT ac.Cod_Alumno,	
+				ROUND(CAST(SUM(CASE WHEN ac.EstadoCatedra IS NULL AND ac.Nota IS NOT NULL AND ac.Categoria IN('CURSADA', 'RECONOCIDA') AND ac.Sit_Catedra='APROBADA'
+				THEN ac.Nota*ac.Ud END) OVER (PARTITION BY ac.Cod_Alumno) AS float) 
+			/
+			NULLIF(CAST(SUM(CASE WHEN ac.EstadoCatedra IS NULL AND ac.Nota IS NOT NULL AND ac.Categoria IN('CURSADA', 'RECONOCIDA') AND ac.Sit_Catedra='APROBADA'
+				THEN ac.Ud END) OVER (PARTITION BY ac.Cod_Alumno) AS float),0),3) AS Promedio_Aprobadas_Cursadas_Reconocidas,
+
+				CAST(SUM(CASE WHEN ac.EstadoCatedra IS NULL AND ac.Categoria IN('CURSADA', 'RECONOCIDA') AND ac.Sit_Catedra='APROBADA'
+				THEN ac.Ud END) OVER (PARTITION BY ac.Cod_Alumno) AS float) AS Creditos_Aprobados_Cursados_Reconocidos,
+
+				CAST(SUM(CASE WHEN ac.EstadoCatedra IS NULL AND ac.Categoria IN('CURSADA', 'RECONOCIDA') AND ac.Sit_Catedra='APROBADA'
+				THEN 1 END) OVER (PARTITION BY ac.Cod_Alumno) AS float) AS Asignaturas_Aprobadas_Cursadas_Reconocidas,
+--
+				ROUND(CAST(SUM(CASE WHEN ac.EstadoCatedra IS NULL AND ac.Nota IS NOT NULL AND ac.Categoria IN('CURSADA', 'RECONOCIDA') AND ac.Sit_Catedra!='PENDIENTE'
+				THEN ac.Nota*ac.Ud END) OVER (PARTITION BY ac.Cod_Alumno) AS float) 
+			/
+				NULLIF(CAST(SUM(CASE WHEN ac.EstadoCatedra IS NULL AND ac.Nota IS NOT NULL AND ac.Categoria IN('CURSADA', 'RECONOCIDA') AND ac.Sit_Catedra!='PENDIENTE'
+				THEN ac.Ud END) OVER (PARTITION BY ac.Cod_Alumno) AS float),0),3) AS Promedio_Aprobadas_Reprobadas_Cursadas_Reconocidas,
+
+				CAST(SUM(CASE WHEN ac.EstadoCatedra IS NULL AND ac.Categoria IN('CURSADA', 'RECONOCIDA') AND ac.Sit_Catedra!='PENDIENTE'
+				THEN ac.Ud END) OVER (PARTITION BY ac.Cod_Alumno) AS float) AS Creditos_Aprobados_Reprobados_Cursados_Reconocidos,
+
+				CAST(SUM(CASE WHEN ac.EstadoCatedra IS NULL AND ac.Categoria IN('CURSADA', 'RECONOCIDA') AND ac.Sit_Catedra!='PENDIENTE'
+				THEN 1 END) OVER (PARTITION BY ac.Cod_Alumno) AS float) AS Asignaturas_Aprobadas_Reprobadas_Cursadas_Reconocidas,
+
+--			
+				ROUND(CAST(SUM(CASE WHEN ac.EstadoCatedra IS NULL AND ac.Nota IS NOT NULL AND ac.Categoria IN('CURSADA') AND ac.Sit_Catedra!='PENDIENTE'
+				THEN ac.Nota*ac.Ud END) OVER (PARTITION BY ac.Cod_Alumno) AS float) 
+			/
+				NULLIF(CAST(SUM(CASE WHEN ac.EstadoCatedra IS NULL AND ac.Categoria IN('CURSADA')  AND ac.Sit_Catedra!='PENDIENTE'
+				THEN ac.Ud END) OVER (PARTITION BY ac.Cod_Alumno) AS float),0),3) AS Promedio_Aprobadas_Reprobadas_Cursadas,
+
+				CAST(SUM(CASE WHEN ac.EstadoCatedra IS NULL AND ac.Categoria IN('CURSADA')  AND ac.Sit_Catedra!='PENDIENTE'
+				THEN ac.Ud END) OVER (PARTITION BY ac.Cod_Alumno) AS float) AS Creditos_Aprobados_Reprobados_Cursados,
+
+				CAST(SUM(CASE WHEN ac.EstadoCatedra IS NULL AND ac.Categoria IN('CURSADA')  AND ac.Nota IS NOT NULL AND ac.Sit_Catedra!='PENDIENTE'
+				THEN 1 END) OVER (PARTITION BY ac.Cod_Alumno) AS float) AS Asignaturas_Aprobadas_Reprobadas_Cursadas,
+
+--
+				ROUND(CAST(SUM(CASE WHEN ac.EstadoCatedra IS NULL AND ac.Nota IS NOT NULL AND ac.Categoria IN('CURSADA') AND ac.Sit_Catedra='APROBADA'
+				THEN ac.Nota*ac.Ud END) OVER (PARTITION BY ac.Cod_Alumno) AS float) 
+			/
+				NULLIF(CAST(SUM(CASE WHEN ac.EstadoCatedra IS NULL AND ac.Categoria IN('CURSADA')  AND ac.Sit_Catedra='APROBADA'
+				THEN ac.Ud END) OVER (PARTITION BY ac.Cod_Alumno) AS float),0),3) AS Promedio_Aprobadas_Cursadas,
+
+			    CAST(SUM(CASE WHEN ac.EstadoCatedra IS NULL AND ac.Categoria IN('CURSADA')  AND ac.Sit_Catedra='APROBADA'
+				THEN ac.Ud END) OVER (PARTITION BY ac.Cod_Alumno) AS float)
+				 AS Creditos_Aprobados_Cursados,
+
+				CAST(SUM(CASE WHEN ac.EstadoCatedra IS NULL AND ac.Categoria IN('CURSADA')  AND ac.Sit_Catedra='APROBADA'
+				THEN 1 END) OVER (PARTITION BY ac.Cod_Alumno) AS float) AS Asignaturas_Aprobadas_Cursadas,
+
+				CAST(SUM(CASE WHEN ac.EstadoCatedra IS NULL AND ac.Categoria IN('CURSADA')  AND ac.Sit_Catedra='REPROBADA'
+				THEN 1 END) OVER (PARTITION BY ac.Cod_Alumno) AS float)
+				 AS Cursos_Reprobados_Cursados,
+
+				CAST(SUM(CASE WHEN ac.EstadoCatedra IS NULL AND ac.Categoria IN('CURSADA', 'RECONOCIDA')  AND ac.Sit_Catedra='REPROBADA'
+				THEN 1 END) OVER (PARTITION BY ac.Cod_Alumno) AS float)
+				 AS Cursos_Reprobados_Cursados_Reconocidos
+FROM Alumnos_Catedras AS ac
         ) AS c
         ON a.Cod_Alumno = c.Cod_Alumno
 WHERE
