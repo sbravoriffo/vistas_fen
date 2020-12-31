@@ -4,7 +4,7 @@
 ** AUTOR
     Fernando Palomera
 ** FECHA ULTIMA MODIFICACION
-    30/07/2020 
+    04/11/2020 - Sebastián bravo
 ** DESCRIPCION
     Generar una vista con los campos calculados más utilizados para reportes de docentes
 ** DETALLES:
@@ -18,6 +18,11 @@
     *Realizar para cálculos de Carga Académica
     Pendiente:
         - OTROS TALLESRES, PRACTICAS ANTIGUAS, TALLER DE INTEGRACION PROFESIONAL, ANTONIO FARIAS?
+
+** CAMBIOS
+    - 04/11/2020: Se excluyen secciones '00'. Estas no poseen carga académica, se crean con fines de avance curricular y demases.
+    - 04/11/2020: Se realiza cruce con consulta que determina si una cátedra tiene solo una clase semanal, para definir como carga media.
+    No solo se deben incluir ciertos códigos como estipulaba la consulta, ya que códigos cambian por períodos.
 **************************/
 
 SELECT
@@ -36,7 +41,7 @@ SELECT
             'ENFIN851', 'ENFIN850', 'ENECO852', 'ENECO850', 'ENCGE851', 'ENCGE850', 'ENMAN850', 
             'ENNEG550', 'ENECO550') 
             THEN 0
-        WHEN t.Cod_Catedra IN ('ENTAL265', 'ENTAL260') 
+        WHEN p.Patrón='1 Día - 1 Módulo'
             THEN ROUND(((1.0 / CAST(COUNT(*) OVER(PARTITION BY t.Periodo, t.Cod_Catedra, t.Cod_Seccion) AS FLOAT)) / 2.0), 2)
         ELSE ROUND((1.0 / CAST(COUNT(*) OVER(PARTITION BY t.Periodo, t.Cod_Catedra, t.Cod_Seccion) AS FLOAT)), 2)
         END) AS Carga_Academica,
@@ -71,7 +76,23 @@ FROM
         ON t.Periodo = e.Periodo
             AND t.Cod_Catedra = e.Cod_Catedra
             AND t.Cod_Seccion = e.Cod_Seccion
-            AND t.Cod_Profesor = e.Cod_Profesor                 
+            AND t.Cod_Profesor = e.Cod_Profesor    
+    LEFT JOIN 
+            -- Tabla con patrones de cátedra, define "OTRO" si no tiene una clase a la semana
+       (SELECT  DISTINCT 
+            Periodo, Cod_Catedra, Cod_Seccion
+            ,(CASE 
+                WHEN ((COUNT(Cod_Dia) OVER (PARTITION BY Cod_Catedra, Cod_Seccion, Periodo))=1
+                 AND (COUNT(Cod_Modulo) OVER (PARTITION BY Cod_Catedra, Cod_Seccion, Cod_Dia, Periodo))=1) THEN '1 Día - 1 Módulo' ELSE 'OTRO' END ) AS Patrón
+        FROM 
+            Clases
+        WHERE 
+            Tipo='CATEDRA'
+        ) AS p
+            ON t.Periodo = p.Periodo
+                AND t.Cod_Catedra = p.Cod_Catedra
+                AND t.Cod_Seccion = p.Cod_Seccion
+
 WHERE
     -- Solo docentes profesores
     Tipo = 'CATEDRA'
@@ -79,3 +100,5 @@ WHERE
     AND c.Eliminado = 0
     -- Filtrar Cursos Antiguos
     AND ISNUMERIC(RIGHT(t.Cod_Catedra, 3)) = 1
+    -- Eliminar secciones "00"
+    AND t.Cod_Seccion NOT IN('00')
